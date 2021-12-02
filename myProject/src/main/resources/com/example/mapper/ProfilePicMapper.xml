@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.ProfilePicMapper">
+
+	
+	<select id = "selectProfilePic" resultType="profilePicVO">
+		<![CDATA[
+			SELECT * 
+			FROM PROFILEPIC 
+			WHERE MID = #{id}
+		]]>
+		
+	</select>
+	
+	<insert id = "insertProfilePic" >
+	
+		<![CDATA[
+			INSERT INTO PROFILEPIC (
+		         UUID,
+		         UPLOADPATH,
+		         FILENAME,
+		         MID
+		      	)
+		   		VALUES (
+		     		 #{uuid},
+		     		 #{uploadpath},
+		     		 #{filename},
+		     		 #{mid}
+		   		)
+	      ]]>
+	</insert>
+		
+	<update id = "updateProfilePic" >
+		   UPDATE PROFILEPIC
+		   SET
+		      UUID			= #{uuid},
+		      UPLOADPATH	= #{uploadpath},
+		      FILENAME		= #{filename},
+		      MID			= #{mid}
+		   WHERE MID = #{mid}
+	</update>
+		
+	<delete id = "deleteProfilePic">
+		DELETE FROM PROFILEPIC WHERE MID = #{id}
+	</delete>
+	
+		
+	
+</mapper>
+
+
+
+

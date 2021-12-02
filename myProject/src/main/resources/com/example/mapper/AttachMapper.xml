@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.mapper.AttachMapper">
+
+	<insert id="insertAttach">
+	<![CDATA[
+		INSERT INTO attach (uuid, uploadpath, filename, filetype, bno)
+		VALUES (#{uuid}, #{uploadpath}, #{filename}, #{filetype}, #{bno})
+	]]>
+	</insert>
+	
+	
+	<insert id="insertAttaches">
+	<![CDATA[
+		INSERT INTO attach (uuid, uploadpath, filename, filetype, bno)
+		VALUES
+	]]>
+		<foreach collection="list" item="attach" separator=",">
+			(#{attach.uuid}, #{attach.uploadpath}, #{attach.filename}, #{attach.filetype}, #{attach.bno})
+		</foreach>
+	</insert>
+	
+	
+	<select id="getAttachesByBno" resultType="attachVO">
+		SELECT * FROM attach WHERE bno = #{bno}
+	</select>
+	
+	
+	<select id="getAttachesByUuids" resultType="attachVO">
+		SELECT * 
+		FROM attach
+		WHERE uuid IN 
+		<foreach collection="list" item="uuid" open="(" separator="," close=")">
+			#{uuid}
+		</foreach>
+	</select>
+	
+	
+	<delete id="deleteAttachesByUuids">
+		DELETE
+		FROM attach
+		WHERE uuid IN 
+		<foreach collection="list" item="uuid" open="(" separator="," close=")">
+			#{uuid}
+		</foreach>
+	</delete>
+	
+	
+	<select id="getBoardsWithAttachWithPaging" resultType="attachVO">
+		<![CDATA[
+				SELECT 
+		       		a.uuid, 
+		       		a.uploadpath, 
+		       		a.filename, 
+		       		a.filetype, 
+		       		a.bno
+				FROM board b 
+				LEFT OUTER JOIN attach a
+					ON b.num = a.bno
+				WHERE filetype = 'I'
+		]]>
+
+			<![CDATA[
+				LIMIT #{startRow}, #{amount}
+			]]>
+	</select>
+	
+	<resultMap type="attachVO" id="getBoardsWithAttachWithPaging">
+		<id 	column="uuid" 		property="uuid"/>
+		<result column="uploadpath" property="uploadpath"/>
+		<result column="filename" 	property="filename"/>
+		<result column="filetype" 	property="filetype"/>
+		<result column="bno" 		property="bno"/>
+	</resultMap>
+
+
+	<select id="getTotalBoardsAttach" resultType="int">
+		<![CDATA[
+				SELECT 
+		       		COUNT(*)
+				FROM board b 
+				LEFT OUTER JOIN attach a
+					ON b.num = a.bno
+				WHERE filetype = 'I'
+		]]>
+	</select>
+
+</mapper>
+
+
+
+
